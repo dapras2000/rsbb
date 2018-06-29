@@ -12,7 +12,7 @@ if(isset($_GET["link"])){
 }else{
 	$link = "";
 }
-// ini adalah komen ahmed
+// ini adalah komen ahmed okde sdadasdasdsa
   //echo $link;
   // CAMPUR
 ?>
