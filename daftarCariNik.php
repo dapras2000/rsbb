@@ -14,6 +14,7 @@
 
 
 <?
+
 include ("include/keDbSiak.php");
 
 if (!$nik = $_POST['nik']){
