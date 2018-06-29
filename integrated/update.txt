@@ -1,0 +1,1 @@
+select distinct(kodesatker),(namasatker) from tdmalokasidak

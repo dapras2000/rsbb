@@ -1,0 +1,1 @@
+at 20:35 /every:M,T,W,Th,F,S,Su "C:\Program Files\Mozilla Firefox\firefox.exe" http://localhost/e-portal/auto_import.php

@@ -1,0 +1,16 @@
+This section contains notes and hints specific to install xajaxGrid.
+
+1.- tar xzvf xajaxGrid-1.0.tar.gz
+2.- mv xajaxGrid /WWW_PUBLIC_PATH
+3.- cd /WWW_PUBLIC_PATH/xajaxGrid
+4.- Create database example P.E:
+	mysql -u root -p -e "CREATE DATABASE xajaxGrid"
+5.- Upload data
+	mysql xajaxGrid -u root -p < sql/xajaxGrid.sql
+6.- Edit and change the line 13 by db parameters P.E.
+	define('SQLC', "mysql://User:Password@localhost/DataBaseName"); 
+7.- Show your URL, P.E: http://mydomain.com/xajaxGrid/
+
+If you have any problem, please send me a email to jjvema@yahoo.com.
+
+Jesus Velazquez

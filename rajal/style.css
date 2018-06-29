@@ -1,0 +1,37 @@
+	
+	/* style.css */
+	
+	body {
+		font-family: verdana, arial, helvetica;
+		font-size: 11px;
+		color: #000000;
+	}
+	
+	.formclass {
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		visibility: hidden;
+		height: 0px;
+		width: 0px;
+		background: #A2BAFA;
+		border-style: solid;
+		border-width: 1px;
+		border-color: #000000;
+	}
+	
+	.autocomp {
+	position: absolute;
+	left: 4px;
+	top: 6px;
+	visibility: hidden;
+	width: 400px;
+	}
+	
+	.taskboxclass {
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		visibility: hidden;
+		width: 0px;
+	}

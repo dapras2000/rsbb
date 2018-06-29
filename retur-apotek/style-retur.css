@@ -1,0 +1,81 @@
+.container-retur {
+	display: flex;
+	font-size: 10pt;
+
+}
+
+.input-retur {
+	flex: 1;
+	
+}
+
+.load-obat {
+	flex: 1;
+	
+}
+
+.save-retur {
+	flex: 1;
+}
+
+.container-panel {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+
+}
+
+.header-panel {
+ height: 25px;
+ width: 98%;
+ display: flex;
+ align-items: center;
+ margin: auto;
+ color: white;
+ font-size: 11pt;
+ border: 2px solid #10A205;
+ background-color: #10A205;
+}
+.header-panel p {
+	margin: 0 auto;
+}
+
+.header-panel span {
+	float: right;
+}
+
+
+.body-panel {
+	flex:1;
+	width: 98%;
+ 	margin: auto;
+	border: 2px solid #10A205;
+	display: flex;
+	flex-direction: row;
+	
+	
+
+}
+
+.body-panel-inputrm {
+	margin: 0 auto;
+	margin-top: 12px;
+	margin-bottom: 12px; 
+}
+
+.body-panel-inputrm input {
+	height: 21px;
+	width: 280px;
+	font-size: 11pt;
+}
+
+.body-panel-inputrm button {
+	height: 26px;
+	width: 79px;
+}
+
+
+.load-obat-content {
+	margin: auto;
+	
+}

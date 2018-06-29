@@ -1,0 +1,3 @@
+<Files *.txt>
+  ForceType applicaton/octet-stream
+</Files>

@@ -1,0 +1,44 @@
+create table T_DPMP
+(
+   IDXDPMP                        int not null AUTO_INCREMENT,
+   IDXRANAP                       int,
+   NOMR                           varchar(6),
+   IDXKDRUANGRANAP                int,
+   KDMAKANAN                      varchar(8),
+   TANGGAL                        date,
+   SHIFT                          int,
+   primary key (IDXDPMP)
+)
+
+create table M_DPMP
+(
+   KDMAKANAN                      varchar(8) not null,
+   GROUPMAKANAN                   varchar(8),
+   NAMAMAKANAN                    char(10),
+   primary key (KDMAKANAN)
+)
+
+switch :
+	case '16'            :
+        if (!file_exists ("gizi/dpmp.php"))
+        die ("gizi/dpmp.php File Empty!");
+        include 'gizi/dpmp.php';
+        break;	
+
+
+menu.php
+}elseif($_SESSION['ROLES']=="15"){
+?>
+    <div id="menu">
+        <div id="menu_nama">
+        <a href="?link=16">DPMP</a> 
+        </div>
+    </div>
+<?	
+}else{
+
+
+userlevel.php
+}elseif($data['ROLES']=="15"){
+	$_SESSION['ROLES']="15";
+	header("location:index.php?link=16");		

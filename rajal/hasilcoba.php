@@ -1,0 +1,1 @@
+<?php echo $_POST["yourname"].'<br>'.$_POST["yourtask"];?>

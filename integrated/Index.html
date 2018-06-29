@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Ditjen BUK</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+<meta name="Author" content="Haidar">
+<link rel="stylesheet" type="text/css" href="css/reset.css">
+<link rel="stylesheet" type="text/css" href="css/structure.css">
+<SCRIPT type=text/javascript src="include/jquery.js"></SCRIPT>
+
+<SCRIPT type=text/javascript> 
+$(document).ready(function(){ 
+ $('#teks').load('label.php'); 
+}); 
+</SCRIPT>
+</head>
+
+<body>
+<div align="center"><img src="images/depkesgo.jpg" border=0></div>
+<DIV style="position:absolute;left:900px;top:50px;width:200px;height:22px;z-index:1" id=teks></DIV>
+<form class="box login" method="post" action="cek_login.php">
+	<fieldset class="boxBody">
+	  <label>Username</label>
+	  <input type="text" name="username" id="username" tabindex="1" placeholder="username" required>
+	 
+	  <input type="password" id="password" name="password" placeholder="password" tabindex="2" required>
+	</fieldset>
+	<footer>
+	  <!--<label><input type="checkbox" tabindex="3">Keep me logged in</label>-->
+	  <input type="submit" class="btnLogin" value="Login" tabindex="4">
+	</footer>
+</form>
+
+</body>
+</html>

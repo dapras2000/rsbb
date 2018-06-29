@@ -1,0 +1,1 @@
+php "D:/xampp/htdocs/e-portal/auto_import.php"

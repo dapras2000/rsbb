@@ -1,0 +1,260 @@
+<?php session_start();
+include("../include/connect.php");
+include("../include/function.php");
+require_once('ps_pagination.php');
+/*
+$search = " AND view_orderlab.TANGGAL = curdate() ";
+$tgl_kunjungan = "";
+if(!empty($_GET['tgl_kunjungan'])) {
+    $tgl_kunjungan =$_GET['tgl_kunjungan'];
+} 
+
+if($tgl_kunjungan !="") {
+    $search = " AND view_orderlab.TANGGAL BETWEEN  '".$tgl_kunjungan."' ";
+}
+
+$tgl_kunjungan2 = "";
+if(!empty($_GET['tgl_kunjungan2'])) {
+    $tgl_kunjungan2 =$_GET['tgl_kunjungan2'];
+} 
+
+
+if($tgl_kunjungan !="") {
+    if($tgl_kunjungan2 !="") {
+        $search = $search." AND '".$tgl_kunjungan2."' ";
+    }else {
+        $search = $search." AND '".$tgl_kunjungan."' ";
+    }
+}
+*/
+$start 	= date('Y-m-d');
+$end 	= date('Y-m-d');
+if($_REQUEST['tgl_kunjungan'] != ''){
+	$start = $_REQUEST['tgl_kunjungan'];
+}
+if($_REQUEST['tgl_kunjungan2'] != ''){
+	$end = $_REQUEST['tgl_kunjungan2'];
+}
+
+$search = 'and a.tglorder BETWEEN "'.$start.'" and "'.$end.'"';
+
+$norm = "";
+if(!empty($_GET['norm'])) {
+    $norm =$_GET['norm'];
+} 
+
+if($norm !="") {
+    $search = $search." AND a.NOMR = '".$norm."' ";
+}
+
+$nama = "";
+if(!empty($_GET['nama'])) {
+    $nama =$_GET['nama'];
+} 
+
+if($nama !="") {
+   # $search = $search." AND b.nama LIKE '%".$nama."%' ";
+}
+?>
+
+<div align="center">
+    <div id="frame" style="width: 100%;">
+        <div id="frame_title"><h3>LIST PASIEN RADIOLOGI</h3></div>
+        <div align="right" style="margin:5px;">
+            <form name="formsearch" method="get" >
+                <table width="248" border="0" cellspacing="0" class="tb">
+                    <tr>
+                        <td width="52">No RM</td>
+                        <td width="192"><input type="text" name="norm" id="norm" value="<? if($norm!="") {
+                                                   echo $norm;
+}?>" class="text" style="width:80px;"></td>
+                    </tr>
+                    <tr>
+                        <td>Nama</td>
+                        <td><input type="text" name="nama" id="nama" value="<? if($nama!="") {
+    echo $nama;
+}?>" class="text"></td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal</td>
+                        <td><input type="text" name="tgl_kunjungan" id="tgl_pesan" readonly="readonly" class="text" style="width:100px;"
+                                   value="<? if($_REQUEST['tgl_kunjungan'] != ""): echo $tgl_kunjungan; else: echo date('Y/m/d'); endif;?>"/><a href="javascript:showCal('Calendar3')"><img align="top" src="img/date.png" border="0" /></a></td>
+                    </tr>
+                    </tr>
+                    <tr>
+                        <td>Sd</td>
+                        <td><input type="text" name="tgl_kunjungan2" id="tgl_pesan2" readonly="readonly" class="text" style="width:100px;"
+                                   value="<? if($_REQUEST['tgl_kunjungan2']!=""): echo $tgl_kunjungan2; else: echo date('Y/m/d'); endif;?>"/><a href="javascript:showCal('Calendar11')"><img align="top" src="img/date.png" border="0" /></a></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td><input type="submit" value="Cari" class="text"/>
+                            <input type="hidden" name="link" value="7order" /></td>
+                    </tr>
+                </table>
+
+            </form>
+            <div id="table_search">
+	<table class="tb" width="95%" style="margin:10px;" border="0" cellspacing="1" cellspading="1" title="List Kunjungan Data Pasien Per Hari Ini">
+    <tr align="center">
+        <th>No</th>
+        <th>Tanggal Order</th>
+        <th>Jenis Photo</th>
+        <th>Diagnosa Klinik</th>
+        <th>Dokter Pengirim</th>
+        <th>Poli/ Ruang</th>
+        <th>NOMR</th>
+        <th>Nama Pasien</th>
+        <th>Cara Bayar</th>
+        <th>Usia</th>
+        <th>&nbsp;</th>
+    </tr>
+                    <?
+                
+                    $NO=0;
+$sql	= 'SELECT DISTINCT a.nomr,a.idxdaftar,a.tglorder AS tanggal,a.polypengirim AS KDPOLY, 
+a.DRPENGIRIM, a.RAJAL, m_tarif2012.nama_tindakan, a.DIAGNOSA, a.IDXORDERRAD, 
+CASE aps WHEN 1 THEN (SELECT nama FROM m_pasien_aps b WHERE b.NOMR=a.NOMR) 
+ELSE (SELECT nama FROM m_pasien b WHERE b.NOMR=a.NOMR) END AS nama, 
+CASE aps WHEN 1 THEN (SELECT tgllahir FROM m_pasien_aps b WHERE b.NOMR=a.NOMR) 
+ELSE (SELECT tgllahir FROM m_pasien b WHERE b.NOMR=a.NOMR) END AS tgllahir, 
+m_dokter.NAMADOKTER, t_pendaftaran.KDCARABAYAR, m_carabayar.NAMA AS carabayar, m_unit.nama_unit as poly_kelas
+FROM t_radiologi a 
+JOIN t_pendaftaran ON t_pendaftaran.IDXDAFTAR = a.IDXDAFTAR
+JOIN m_carabayar ON m_carabayar.KODE = t_pendaftaran.KDCARABAYAR
+LEFT JOIN m_dokter ON m_dokter.KDDOKTER = a.DRPENGIRIM 
+JOIN m_tarif2012 ON m_tarif2012.kode_tindakan = a.JENISPHOTO 
+JOIN m_unit on m_unit.kode_unit = a.POLYPENGIRIM
+INNER JOIN m_pasien b ON a.NOMR = b.nomr 
+AND (a.TGLPERIKSA = "0000-00-00" OR a.TGLPERIKSA IS NULL) 
+AND b.nama LIKE "%'.$nama.'%" '.$search.'
+UNION
+SELECT DISTINCT a.nomr,a.idxdaftar,a.tglorder AS tanggal,a.polypengirim AS KDPOLY, a.DRPENGIRIM, a.RAJAL, m_tarif2012.nama_tindakan, a.DIAGNOSA, a.IDXORDERRAD,
+CASE aps WHEN 1 THEN (SELECT nama FROM m_pasien_aps b WHERE b.NOMR=a.NOMR) 
+ELSE (SELECT nama FROM m_pasien b WHERE b.NOMR=a.NOMR) END AS nama,
+CASE aps WHEN 1 THEN (SELECT tgllahir FROM m_pasien_aps b WHERE b.NOMR=a.NOMR) 
+ELSE (SELECT tgllahir FROM m_pasien b WHERE b.NOMR=a.NOMR) END AS tgllahir,
+CASE rajal WHEN 1 THEN (SELECT m_unit.nama_unit FROM m_unit WHERE m_unit.kode_unit = a.polypengirim) 
+ELSE (SELECT m_ruang.nama FROM m_ruang WHERE m_ruang.no = a.polypengirim) END AS poly_kelas,
+m_dokter.NAMADOKTER, t_pendaftaran_aps.KDCARABAYAR, m_carabayar.NAMA AS carabayar
+FROM t_radiologi a
+JOIN t_pendaftaran_aps ON t_pendaftaran_aps.IDXDAFTAR = a.IDXDAFTAR
+JOIN m_carabayar ON m_carabayar.KODE = t_pendaftaran_aps.KDCARABAYAR
+LEFT JOIN m_dokter ON m_dokter.KDDOKTER = a.DRPENGIRIM
+JOIN m_tarif2012 ON m_tarif2012.kode_tindakan = a.JENISPHOTO 
+INNER JOIN m_pasien_aps b ON a.NOMR = b.nomr 
+JOIN t_pendaftaran_aps g on g.IDXDAFTAR = a.IDXDAFTAR
+AND (a.TGLPERIKSA = "0000-00-00" OR a.TGLPERIKSA IS NULL) 
+AND b.nama LIKE "%'.$nama.'%" '.$search.'';
+                    $pager = new PS_Pagination($connect, $sql, 15, 5, "tgl_kunjungan=".$tgl_kunjungan."&nama=".$nama."&norm=".$norm,"index.php?link=6&");
+//The paginate() function returns a mysql result set 
+                    $rs = $pager->paginate();
+                    if(!$rs) die(mysql_error());
+                    while($data = mysql_fetch_array($rs)) {?>
+                    <tr <?   echo "class =";
+                        $count++;
+                        if ($count % 2) {
+                                echo "tr1";
+    }
+                                else {
+                                    echo "tr2";
+                                }
+                                ?>>
+                        <td><? $NO=($NO+1);
+                                if ($_GET['page']==0) {
+        $hal=0;
+    }else {
+        $hal=$_GET['page']-1;
+    } echo
+    
+    ($hal*15)+$NO;?></td>
+                        
+                        <td><? echo $data['tanggal']; ?></td>
+                        <td><? echo $data['nama_tindakan']; ?></td>
+                        <td><? echo $data['DIAGNOSA']; ?></td>
+                        <td><? echo $data['NAMADOKTER']; ?></td>
+                        <td><? echo $data['poly_kelas']; ?></td>
+                        <td><? echo $data['nomr'];?></td>
+                        <td><? echo $data['nama']; ?></td>
+                        <td><? echo $data['carabayar'];?></td>
+                        <td><? $z = datediff($data['tgllahir'],date('Y-m-d')); echo $z['years'];?></td>
+                        <td><a href="index.php?link=73&amp;idxorder=<?php echo $data['IDXORDERRAD']; ?>"><input type="button" class="text" value="PERIKSA"/></a></td>
+                    </tr>
+                        <?	}
+
+                    //Display the full navigation in one go
+                    //echo $pager->renderFullNav();
+
+                    //Or you can display the inidividual links
+                    echo "<div style='padding:5px;' align=\"center\"><br />";
+
+                    //Display the link to first page: First
+                    echo $pager->renderFirst()." | ";
+
+                    //Display the link to previous page: <<
+                    echo $pager->renderPrev()." | ";
+
+                    //Display page links: 1 2 3
+                    echo $pager->renderNav()." | ";
+
+                    //Display the link to next page: >>
+                    echo $pager->renderNext()." | ";
+
+//Display the link to last page: Last
+echo $pager->renderLast();
+
+                echo "</div>";
+                ?>
+
+                </table>
+
+                <?php
+
+                //Display the full navigation in one go
+                //echo $pager->renderFullNav();
+
+                //Or you can display the inidividual links
+                echo "<div style='padding:5px;' align=\"center\"><br />";
+
+                //Display the link to first page: First
+                echo $pager->renderFirst()." | ";
+
+                //Display the link to previous page: <<
+                echo $pager->renderPrev()." | ";
+
+                //Display page links: 1 2 3
+                echo $pager->renderNav()." | ";
+
+                //Display the link to next page: >>
+                echo $pager->renderNext()." | ";
+
+//Display the link to last page: Last
+echo $pager->renderLast();
+
+    echo "</div>";
+    ?>
+            </div>
+        </div>
+    </div>
+    <br />
+    <?
+    $qry_excel = "SELECT DISTINCT view_orderlab.TANGGAL,
+					view_orderlab.NOMR, 
+					view_orderlab.NAMA AS NAMA_PASIEN,
+					view_orderlab.ALAMAT, 
+					view_orderlab.POLY, 
+					view_orderlab.NAMADOKTER AS DOKTER_PENGIRIM, 
+					view_orderlab.CARABAYAR AS STATUS_BAYAR,
+  					view_orderlab.RUJUKAN
+			FROM view_orderlab 
+			WHERE view_orderlab.STATUS = '0' ".$search;
+?>
+    <div align="left">
+        <form name="formprint" method="post" action="gudang/excelexport.php" target="_blank" >
+            <input type="hidden" name="query" value="<?=$qry_excel?>" />
+            <input type="hidden" name="header" value="LIST ORDER LABORATORIUM" />
+            <input type="hidden" name="filename" value="list_lab" />
+            <input type="submit" value="Export To Ms Excel Document" class="text" />
+        </form>
+    </div>
+</div>
