@@ -12,9 +12,13 @@ if(isset($_GET["link"])){
 }else{
 	$link = "";
 }
+<<<<<<< HEAD
 // ini adalah komen ahmed okde sdadasdasdsa
   //echo $link;
   // CAMPUR
+=======
+// komentar lainya 
+>>>>>>> aadb97184c92867ad11363eba271fa99fca67b22
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
